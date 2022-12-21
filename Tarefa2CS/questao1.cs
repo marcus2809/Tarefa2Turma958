@@ -11,37 +11,37 @@ namespace Tarefa2CS
     {
         static void Main(string[] args)
         {
-            int[,] matrizDistancias = FromFile();
-            Console.WriteLine("Insira o percurso, separando os valores por espaço:");
-            string percursoLido = Console.ReadLine();
+            int[,] matrizDistancias = MatrixFromFile("matriz.txt");
 
-            var percurso = percursoLido.Split(' ').Select(int.Parse).ToList();
-            percurso = percurso.Select(x => x - 1).ToList();
+            int[] percurso = VectorFromFile("caminho.txt");
 
             int distanciaPercorrida = 0;
 
-            for (int i = 1; i < percurso.Count(); i++)
+            for (int i = 1; i < percurso.Length; i++)
             {
                 distanciaPercorrida += matrizDistancias[percurso[i-1], percurso[i]];
             }
 
             Console.WriteLine($"A distância percorrida foi {distanciaPercorrida}");
-        }   
-
-        public static int[,] FromFile()
+        }
+        
+        public static string[] ConfigFile(string nomeArquivo)
         {
             var caminhoDesktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            var nomeArquivo = "Distancias.txt";
-
             var caminhoArquivo = Path.Combine(caminhoDesktop, nomeArquivo);
-
             string[] conteudo = File.ReadAllLines(caminhoArquivo);
+            return conteudo;
+        }
+
+        public static int[,] MatrixFromFile(string nomeArquivo)
+        {
+            var conteudo = ConfigFile(nomeArquivo);
 
             int[,] matrizDistancias = new int[conteudo.Length, conteudo.Length];
 
             for (int i = 0; i < conteudo.Length; i++)
             {
-                string[] distancias = conteudo[i].Split(' ');
+                string[] distancias = conteudo[i].Split(',');
                 for (int j = 0; j < conteudo.Length; j++)
                 {
                     matrizDistancias[i,j] = int.Parse(distancias[j]);
@@ -49,6 +49,21 @@ namespace Tarefa2CS
             }
 
             return matrizDistancias;
+        }
+
+        public static int[] VectorFromFile(string nomeArquivo)
+        {
+            string[] conteudo = ConfigFile(nomeArquivo);
+            var cidades = conteudo[0].Split(','); 
+            int[] vetorCidades = new int[cidades.Length];
+
+            for (int i = 0; i < vetorCidades.Length; i++)
+            {
+                vetorCidades[i] = int.Parse(cidades[i]);
+                vetorCidades[i]--;
+            }
+
+            return vetorCidades;
         }
     }
 }
