@@ -68,21 +68,5 @@ namespace Tarefa2CS
 
             return items;
         }
-
-        public static int[] VectorFromFile(string nomeArquivo)
-        {
-            var caminhoArquivo = ConfigFile(nomeArquivo);
-            string[] conteudo = File.ReadAllLines(caminhoArquivo);
-            var cidades = conteudo[0].Split(','); 
-            int[] vetorCidades = new int[cidades.Length];
-
-            for (int i = 0; i < vetorCidades.Length; i++)
-            {
-                vetorCidades[i] = int.Parse(cidades[i]);
-                vetorCidades[i]--;
-            }
-
-            return vetorCidades;
-        }
     }
 }
